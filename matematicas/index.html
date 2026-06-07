@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Matemáticas con Emi! 🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF6B9D;
+    --yellow: #FFD93D;
+    --blue: #4ECDC4;
+    --purple: #A855F7;
+    --green: #6BCB77;
+    --orange: #FF9A3C;
+    --bg: #FFF5F9;
+    --dark: #2D2D44;
+    --white: #FFFFFF;
+    --shadow: 0 8px 32px rgba(168,85,247,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Fondo animado con estrellas */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,107,157,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(78,205,196,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(168,85,247,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    font-size: 1.2rem;
+    animation: floatStar linear infinite;
+    opacity: 0.6;
+  }
+  @keyframes floatStar {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* PANTALLA INICIO */
+  #screen-start {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .title-badge {
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    padding: 1rem 3rem;
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(255,107,157,0.4), inset 0 2px 0 rgba(255,255,255,0.3);
+    margin-bottom: 0.5rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .subtitle {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    color: var(--purple);
+    margin-bottom: 3rem;
+  }
+
+  .character {
+    font-size: 6rem;
+    margin-bottom: 1.5rem;
+    animation: wiggle 3s ease-in-out infinite;
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 480px;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .topic-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.2rem 1rem;
+    cursor: pointer;
+    border: 3px solid transparent;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .topic-card:nth-child(1)::before { background: linear-gradient(135deg, #FF6B9D22, #FFD93D22); }
+  .topic-card:nth-child(2)::before { background: linear-gradient(135deg, #4ECDC422, #6BCB7722); }
+  .topic-card:nth-child(3)::before { background: linear-gradient(135deg, #A855F722, #4ECDC422); }
+  .topic-card:nth-child(4)::before { background: linear-gradient(135deg, #FF9A3C22, #FF6B9D22); }
+  .topic-card:nth-child(5)::before { background: linear-gradient(135deg, #6BCB7722, #FFD93D22); }
+  .topic-card:hover::before { opacity: 1; }
+
+  .topic-card:nth-child(1) { border-color: var(--pink); }
+  .topic-card:nth-child(2) { border-color: var(--blue); }
+  .topic-card:nth-child(3) { border-color: var(--purple); }
+  .topic-card:nth-child(4) { border-color: var(--orange); }
+  .topic-card:nth-child(5) { border-color: var(--green); grid-column: span 2; }
+
+  .topic-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  }
+  .topic-icon { font-size: 2.5rem; }
+  .topic-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    color: var(--dark);
+    text-align: center;
+  }
+
+  .stars-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 100px;
+    box-shadow: var(--shadow);
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    color: var(--dark);
+    margin-bottom: 2rem;
+  }
+
+  /* PANTALLA JUEGO */
+  #screen-game {
+    display: none;
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    padding: 1.5rem;
+  }
+
+  .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  .btn-back {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--dark);
+    transition: all 0.2s;
+  }
+  .btn-back:hover { background: var(--bg); }
+
+  .progress-bar-wrap {
+    flex: 1;
+    margin: 0 1rem;
+    background: #e8e8f0;
+    border-radius: 100px;
+    height: 14px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--purple));
+    border-radius: 100px;
+    transition: width 0.5s ease;
+  }
+
+  .score-badge {
+    background: var(--yellow);
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    color: var(--dark);
+    box-shadow: 0 3px 10px rgba(255,217,61,0.4);
+  }
+
+  .question-card {
+    background: white;
+    border-radius: 28px;
+    padding: 2.5rem 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    text-align: center;
+    animation: cardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: scale(0.85) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .question-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #aaa;
+    margin-bottom: 0.8rem;
+  }
+
+  .question-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  /* OPERACIONES MATEMÁTICAS */
+  .math-op {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+    background: #f8f4ff;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .math-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+  }
+  .math-op-sign {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    min-width: 2rem;
+    text-align: center;
+  }
+  .op-plus { color: var(--blue); }
+  .op-minus { color: var(--pink); }
+  .math-num { color: var(--dark); min-width: 4rem; text-align: right; }
+  .math-line { width: 100%; height: 3px; background: var(--dark); border-radius: 2px; margin: 0.3rem 0; }
+
+  /* INPUT respuesta */
+  .answer-input {
+    width: 120px;
+    height: 70px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    text-align: center;
+    border: 3px solid #e0e0e0;
+    border-radius: 16px;
+    background: var(--bg);
+    color: var(--dark);
+    outline: none;
+    transition: all 0.2s;
+    -moz-appearance: textfield;
+  }
+  .answer-input::-webkit-outer-spin-button,
+  .answer-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .answer-input:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(168,85,247,0.15); }
+  .answer-input.correct { border-color: var(--green); background: #f0fff4; }
+  .answer-input.wrong { border-color: var(--pink); background: #fff0f5; }
+
+  /* OPCIONES MÚLTIPLES */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .option-btn {
+    background: var(--bg);
+    border: 3px solid #e8e8f0;
+    border-radius: 16px;
+    padding: 1rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    color: var(--dark);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .option-btn .opt-icon { font-size: 2rem; }
+  .option-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    border-color: var(--purple);
+    background: white;
+    box-shadow: 0 4px 16px rgba(168,85,247,0.15);
+  }
+  .option-btn.correct { background: #d4f5e2; border-color: var(--green); }
+  .option-btn.wrong { background: #ffe0e9; border-color: var(--pink); }
+  .option-btn:disabled { cursor: default; }
+
+  /* BOTÓN VERIFICAR / SIGUIENTE */
+  .btn-check {
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(168,85,247,0.35);
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .btn-check:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(168,85,247,0.45); }
+  .btn-check:active { transform: translateY(0); }
+  .btn-check:disabled { opacity: 0.5; cursor: default; }
+
+  /* FEEDBACK */
+  .feedback {
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    margin: 0.8rem 0;
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: none;
+  }
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .feedback.correct { background: #d4f5e2; color: #1a7a3a; display: block; }
+  .feedback.wrong { background: #ffe0e9; color: #c0144a; display: block; }
+
+  /* FIGURAS GEOMÉTRICAS */
+  .geo-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0 1.5rem;
+  }
+  .geo-shape {
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+    transition: transform 0.3s;
+  }
+  .geo-shape:hover { transform: scale(1.05) rotate(5deg); }
+
+  /* PANTALLA RESULTADO */
+  #screen-result {
+    display: none;
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .result-card {
+    background: white;
+    border-radius: 32px;
+    padding: 3rem 2.5rem;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 16px 60px rgba(0,0,0,0.1);
+  }
+
+  .result-emoji { font-size: 5rem; margin-bottom: 1rem; animation: bounce 1s ease-in-out infinite; }
+  .result-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+  .result-score {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 1rem 0;
+  }
+  .result-msg { font-size: 1.1rem; color: #666; margin-bottom: 2rem; }
+
+  .result-stars { font-size: 2.5rem; margin-bottom: 1.5rem; letter-spacing: 0.5rem; }
+
+  .btn-play-again {
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(78,205,196,0.35);
+    transition: all 0.2s;
+    margin: 0.5rem;
+    display: inline-block;
+  }
+  .btn-play-again:hover { transform: translateY(-3px); }
+
+  .btn-home {
+    background: white;
+    border: 3px solid #e0e0e0;
+    border-radius: 50px;
+    padding: 0.8rem 2rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--dark);
+    transition: all 0.2s;
+    margin: 0.5rem;
+    display: inline-block;
+  }
+  .btn-home:hover { border-color: var(--purple); color: var(--purple); }
+
+  /* CONFETI */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 3s ease-in forwards;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* MEDIDAS */
+  .medida-img {
+    font-size: 4rem;
+    margin: 1rem 0;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  }
+
+  /* PROBLEMA */
+  .problem-text {
+    background: #f8f4ff;
+    border-left: 5px solid var(--purple);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark);
+    text-align: left;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  /* Tooltip de ayuda */
+  .hint-btn {
+    background: var(--yellow);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    box-shadow: 0 3px 10px rgba(255,217,61,0.4);
+    transition: transform 0.2s;
+  }
+  .hint-btn:hover { transform: scale(1.15) rotate(15deg); }
+
+  .hint-box {
+    display: none;
+    background: #fffbea;
+    border: 2px solid var(--yellow);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    color: #7a6000;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  .hint-box.visible { display: block; }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .title-badge { font-size: 2.5rem; padding: 0.8rem 2rem; }
+    .topic-grid { grid-template-columns: repeat(2, 1fr); max-width: 360px; }
+    .math-row { font-size: 2.2rem; }
+    .question-card { padding: 1.8rem 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<!-- PANTALLA INICIO -->
+<div id="screen-start">
+  <div class="character">🌟</div>
+  <div class="title-badge">¡Matemáticas!</div>
+  <div class="subtitle">con Emi ✨</div>
+
+  <div class="stars-display">
+    ⭐ Estrellas: <span id="total-stars">0</span>
+  </div>
+
+  <p style="font-weight:700; color:#888; margin-bottom:1rem; font-size:0.95rem;">¿Qué tema quieres practicar?</p>
+
+  <div class="topic-grid">
+    <div class="topic-card" onclick="startGame('sumas')">
+      <div class="topic-icon">➕</div>
+      <div class="topic-name">Sumas simples</div>
+    </div>
+    <div class="topic-card" onclick="startGame('restas')">
+      <div class="topic-icon">➖</div>
+      <div class="topic-name">Restas simples</div>
+    </div>
+    <div class="topic-card" onclick="startGame('sumastransformacion')">
+      <div class="topic-icon">🔢</div>
+      <div class="topic-name">Sumas con transformación</div>
+    </div>
+    <div class="topic-card" onclick="startGame('figuras')">
+      <div class="topic-icon">🔷</div>
+      <div class="topic-name">Figuras geométricas</div>
+    </div>
+    <div class="topic-card" onclick="startGame('medidas')">
+      <div class="topic-icon">📏</div>
+      <div class="topic-name">Medidas y unidades</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA JUEGO -->
+<div id="screen-game">
+  <div class="game-header">
+    <button class="btn-back" onclick="goHome()">← Inicio</button>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+    </div>
+    <div class="score-badge">⭐ <span id="current-score">0</span></div>
+  </div>
+
+  <div class="question-card" id="question-card">
+    <div class="question-label" id="q-label">Pregunta 1 de 10</div>
+    <!-- contenido dinámico -->
+  </div>
+</div>
+
+<!-- PANTALLA RESULTADO -->
+<div id="screen-result">
+  <div class="result-card">
+    <div class="result-emoji" id="result-emoji">🎉</div>
+    <div class="result-title" id="result-title">¡Excelente!</div>
+    <div class="result-stars" id="result-stars">⭐⭐⭐</div>
+    <div class="result-score" id="result-score-display">10/10</div>
+    <div class="result-msg" id="result-msg">¡Lo hiciste increíble!</div>
+    <div>
+      <button class="btn-play-again" onclick="replayGame()">🔄 Jugar de nuevo</button>
+      <button class="btn-home" onclick="goHome()">🏠 Inicio</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// === ESTADO ===
+let currentTopic = '';
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let totalStarsEarned = 0;
+let answered = false;
+let hintVisible = false;
+
+// === ESTRELLAS FLOTANTES ===
+function createStars() {
+  const container = document.getElementById('stars');
+  const emojis = ['⭐','✨','🌟','💫','🎀','🌸','🎈'];
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDuration = (8 + Math.random() * 12) + 's';
+    s.style.animationDelay = (Math.random() * 15) + 's';
+    s.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+    container.appendChild(s);
+  }
+}
+createStars();
+
+// === GENERADORES DE PREGUNTAS ===
+
+function genSumas(n=10) {
+  const qs = [];
+  for (let i = 0; i < n; i++) {
+    const a = Math.floor(Math.random() * 9) + 1;
+    const b = Math.floor(Math.random() * (10 - a));
+    qs.push({ type: 'math', op: '+', a, b, answer: a + b });
+  }
+  return qs;
+}
+
+function genRestas(n=10) {
+  const qs = [];
+  for (let i = 0; i < n; i++) {
+    const a = Math.floor(Math.random() * 8) + 2;
+    const b = Math.floor(Math.random() * a);
+    qs.push({ type: 'math', op: '-', a, b, answer: a - b });
+  }
+  return qs;
+}
+
+function genSumasTransformacion(n=10) {
+  const qs = [];
+  const pares = [
+    [35,46],[41,29],[16,37],[27,27],
+    [53,29],[65,47],[16,88],[37,24],
+    [55,36],[75,26],[25,19],[84,16],[72,45],
+    [82,46],[57,28],[94,15],[64,16]
+  ];
+  const usados = [...pares].sort(() => Math.random()-0.5).slice(0, n);
+  usados.forEach(([a,b]) => {
+    qs.push({ type: 'math2d', op: '+', a, b, answer: a + b });
+  });
+  return qs;
+}
+
+function genFiguras(n=10) {
+  const figuras = [
+    { name: 'Cuadrado', lados: 4, vertices: 4, svg: `<svg width="130" height="130"><rect x="15" y="15" width="100" height="100" fill="#4ECDC4" stroke="#2D2D44" stroke-width="4" rx="4"/></svg>`, igual: true },
+    { name: 'Rectángulo', lados: 4, vertices: 4, svg: `<svg width="160" height="100"><rect x="10" y="10" width="140" height="80" fill="#A855F7" stroke="#2D2D44" stroke-width="4" rx="4"/></svg>`, igual: false },
+    { name: 'Triángulo', lados: 3, vertices: 3, svg: `<svg width="130" height="120"><polygon points="65,10 10,110 120,110" fill="#FF6B9D" stroke="#2D2D44" stroke-width="4"/></svg>`, igual: null },
+    { name: 'Círculo', lados: 0, vertices: 0, svg: `<svg width="130" height="130"><circle cx="65" cy="65" r="55" fill="#FFD93D" stroke="#2D2D44" stroke-width="4"/></svg>`, igual: null },
+  ];
+
+  const tipos = [
+    (f) => ({
+      type: 'choice',
+      question: '¿Cómo se llama esta figura?',
+      svg: f.svg,
+      options: figuras.map((x, i) => ({ text: x.name, emoji: ['🌟','💫','✨','⭐'][i], correct: x.name === f.name })).sort(() => Math.random()-0.5),
+      hint: `Cuenta los lados de la figura`,
+    }),
+    (f) => ({
+      type: 'input-num',
+      question: `¿Cuántos lados tiene el ${f.name.toLowerCase()}?`,
+      svg: f.svg,
+      answer: f.lados,
+      hint: f.lados === 0 ? '¡Piensa en una pelota! Tiene 0 lados.' : `Cuenta cada lado uno por uno.`,
+    }),
+    (f) => f.vertices > 0 ? {
+      type: 'input-num',
+      question: `¿Cuántos vértices (esquinas) tiene el ${f.name.toLowerCase()}?`,
+      svg: f.svg,
+      answer: f.vertices,
+      hint: `Un vértice es cada esquinita de la figura.`,
+    } : null,
+  ];
+
+  const qs = [];
+  for (let i = 0; i < n; i++) {
+    const f = figuras[Math.floor(Math.random() * figuras.length)];
+    const tipoFn = tipos[Math.floor(Math.random() * tipos.length)];
+    const q = tipoFn(f);
+    if (q) qs.push(q);
+    else i--;
+  }
+  return qs.slice(0, n);
+}
+
+function genMedidas(n=10) {
+  const preguntas = [
+    { type: 'choice', question: '¿Con qué se mide la longitud?', options: [
+        { text: 'Metro y centímetro', emoji: '📏', correct: true },
+        { text: 'Litro y mililitro', emoji: '🥤', correct: false },
+        { text: 'Kilo y gramo', emoji: '⚖️', correct: false },
+        { text: 'Hora y minuto', emoji: '⏰', correct: false },
+    ], hint: '¡Piensa en una regla!' },
+    { type: 'choice', question: '¿Con qué se mide la capacidad (líquidos)?', options: [
+        { text: 'Litros', emoji: '🥛', correct: true },
+        { text: 'Metros', emoji: '📏', correct: false },
+        { text: 'Kilos', emoji: '⚖️', correct: false },
+        { text: 'Horas', emoji: '⏰', correct: false },
+    ], hint: '¿Cuánto cabe en una botella?' },
+    { type: 'choice', question: '¿Con qué se mide la masa (peso)?', options: [
+        { text: 'Kilos y gramos', emoji: '⚖️', correct: true },
+        { text: 'Metros', emoji: '📏', correct: false },
+        { text: 'Litros', emoji: '💧', correct: false },
+        { text: 'Minutos', emoji: '⏱️', correct: false },
+    ], hint: '¡Piensa en una báscula!' },
+    { type: 'choice', question: 'Una manzana 🍎 se mide con...', options: [
+        { text: 'Masa (kilos)', emoji: '⚖️', correct: true },
+        { text: 'Longitud (metros)', emoji: '📏', correct: false },
+        { text: 'Capacidad (litros)', emoji: '💧', correct: false },
+        { text: 'Tiempo (horas)', emoji: '⏰', correct: false },
+    ], hint: 'Para medir lo que pesa algo usamos...' },
+    { type: 'choice', question: 'Una piscina 🏊 se mide con...', options: [
+        { text: 'Capacidad (litros)', emoji: '💧', correct: true },
+        { text: 'Masa (kilos)', emoji: '⚖️', correct: false },
+        { text: 'Tiempo (horas)', emoji: '⏰', correct: false },
+        { text: 'Longitud (metros)', emoji: '📏', correct: false },
+    ], hint: '¿Cuánta agua cabe en una piscina?' },
+    { type: 'choice', question: 'Una calle 🛣️ se mide con...', options: [
+        { text: 'Longitud (metros)', emoji: '📏', correct: true },
+        { text: 'Capacidad (litros)', emoji: '💧', correct: false },
+        { text: 'Masa (kilos)', emoji: '⚖️', correct: false },
+        { text: 'Temperatura', emoji: '🌡️', correct: false },
+    ], hint: 'Para medir distancias usamos...' },
+    { type: 'choice', question: '1 litro de leche 🥛 - ¿qué tipo de medida es?', options: [
+        { text: 'Capacidad', emoji: '💧', correct: true },
+        { text: 'Masa', emoji: '⚖️', correct: false },
+        { text: 'Longitud', emoji: '📏', correct: false },
+        { text: 'Temperatura', emoji: '🌡️', correct: false },
+    ], hint: 'Los líquidos se miden con...' },
+    { type: 'choice', question: '¿Cuál de estos mide longitud?', options: [
+        { text: 'La regla 📏', emoji: '📏', correct: true },
+        { text: 'La báscula ⚖️', emoji: '⚖️', correct: false },
+        { text: 'El vaso medidor 🥛', emoji: '🥛', correct: false },
+        { text: 'El reloj ⏰', emoji: '⏰', correct: false },
+    ], hint: '¡Piensa qué herramienta usas para medir un lápiz!' },
+    { type: 'choice', question: 'Un edificio 🏢 mide 9... ¿qué unidad?', options: [
+        { text: 'Metros', emoji: '📏', correct: true },
+        { text: 'Litros', emoji: '💧', correct: false },
+        { text: 'Kilos', emoji: '⚖️', correct: false },
+        { text: 'Litros', emoji: '🥤', correct: false },
+    ], hint: '¿Cómo mides la altura de algo?' },
+    { type: 'choice', question: 'Un bebé recién nacido 👶 pesa 4... ¿qué unidad?', options: [
+        { text: 'Kilos', emoji: '⚖️', correct: true },
+        { text: 'Litros', emoji: '💧', correct: false },
+        { text: 'Metros', emoji: '📏', correct: false },
+        { text: 'Centímetros', emoji: '📐', correct: false },
+    ], hint: 'Para saber cuánto pesa alguien usamos...' },
+  ];
+  return preguntas.sort(() => Math.random()-0.5).slice(0, n);
+}
+
+function genProblemas(n=10) {
+  const pool = [
+    { q:'Darío recogió 17 uvas y Elena 12. ¿Quién recogió más?', type:'choice', options:[{text:'Darío (17)',emoji:'🍇',correct:true},{text:'Elena (12)',emoji:'🍇',correct:false},{text:'Los dos igual',emoji:'🤝',correct:false},{text:'No se puede saber',emoji:'🤷',correct:false}], hint:'Compara 17 y 12. ¿Cuál es mayor?' },
+    { q:'Camila tiene 10 años. ¿Qué edad tendrá dentro de 9 años?', type:'input-num', answer:19, hint:'10 + 9 = ?' },
+    { q:'Samanta tiene 21 canicas y Manuel 15. ¿Cuántas tienen en total?', type:'input-num', answer:36, hint:'21 + 15 = ?' },
+    { q:'En una caja hay 17 manzanas y 19 peras. ¿Cuántas frutas hay en total?', type:'input-num', answer:36, hint:'17 + 19 = ?' },
+    { q:'Jesús tiene 70 pesos, Jack 22 y Rosa 44. ¿Cuánto dinero tienen juntos?', type:'input-num', answer:136, hint:'70 + 22 + 44 = ?' },
+    { q:'En una granja hay 56 cerdos y 44 vacas. ¿Cuántas vacas faltan para tener el mismo número de cerdos?', type:'input-num', answer:12, hint:'56 - 44 = ?' },
+    { q:'Jorge tiene 8 carritos, 15 canicas, 1 bicicleta y 3 robots. ¿Cuántos juguetes tiene en total?', type:'input-num', answer:27, hint:'8 + 15 + 1 + 3 = ?' },
+    { q:'Esteban tenía 66 estampas y le regaló 22 a su hermana. ¿Cuántas le quedaron?', type:'input-num', answer:44, hint:'66 - 22 = ?' },
+    { q:'Samuel tiene 12 primas y 16 primos. ¿Cuántos primos tiene en total?', type:'input-num', answer:28, hint:'12 + 16 = ?' },
+    { q:'Luis tiene 80 chocolates y saca 44. ¿Cuántos le quedaron?', type:'input-num', answer:36, hint:'80 - 44 = ?' },
+    { q:'En 3°A hay 27 alumnos y en 3°B hay 29. ¿Cuántos alumnos hay en total?', type:'input-num', answer:56, hint:'27 + 29 = ?' },
+    { q:'En la escuela de Romina hay 92 alumnos. El lunes asistieron 65. ¿Cuántos faltaron?', type:'input-num', answer:27, hint:'92 - 65 = ?' },
+  ];
+  return pool.sort(() => Math.random()-0.5).slice(0, n).map(p => ({...p, isProblem: true}));
+}
+
+// === INICIO DE JUEGO ===
+function startGame(topic) {
+  currentTopic = topic;
+  currentQ = 0;
+  score = 0;
+  answered = false;
+
+  const n = 10;
+  if (topic === 'sumas') questions = genSumas(n);
+  else if (topic === 'restas') questions = genRestas(n);
+  else if (topic === 'sumastransformacion') questions = genSumasTransformacion(n);
+  else if (topic === 'figuras') questions = genFiguras(n);
+  else if (topic === 'medidas') questions = genMedidas(n);
+
+  document.getElementById('screen-start').style.display = 'none';
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'block';
+
+  renderQuestion();
+}
+
+function replayGame() {
+  startGame(currentTopic);
+}
+
+function goHome() {
+  document.getElementById('screen-game').style.display = 'none';
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-start').style.display = 'flex';
+  document.getElementById('total-stars').textContent = totalStarsEarned;
+}
+
+// === RENDER PREGUNTA ===
+function renderQuestion() {
+  answered = false;
+  hintVisible = false;
+  const q = questions[currentQ];
+  const total = questions.length;
+  const card = document.getElementById('question-card');
+
+  document.getElementById('q-label').textContent = `Pregunta ${currentQ + 1} de ${total}`;
+  document.getElementById('progress-bar').style.width = ((currentQ / total) * 100) + '%';
+  document.getElementById('current-score').textContent = score;
+
+  let html = '';
+
+  if (q.type === 'math') {
+    const signClass = q.op === '+' ? 'op-plus' : 'op-minus';
+    html = `
+      <div style="position:relative">
+        <button class="hint-btn" onclick="toggleHint()">💡</button>
+        <div class="hint-box" id="hint-box">Cuenta con los dedos: ${q.a} ${q.op === '+' ? 'más' : 'menos'} ${q.b}</div>
+        <div class="math-op">
+          <div class="math-row">
+            <span class="math-op-sign" style="visibility:hidden">+</span>
+            <span class="math-num">${q.a}</span>
+          </div>
+          <div class="math-row">
+            <span class="math-op-sign ${signClass}">${q.op}</span>
+            <span class="math-num">${q.b}</span>
+          </div>
+          <div class="math-line"></div>
+        </div>
+        <div>
+          <input type="number" class="answer-input" id="answer" placeholder="?" min="0" max="99"
+            onkeydown="if(event.key==='Enter') checkAnswer()">
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <button class="btn-check" id="btn-check" onclick="checkAnswer()">¡Verificar! ✓</button>
+      </div>
+    `;
+  }
+
+  else if (q.type === 'math2d') {
+    const a1 = Math.floor(q.a / 10), a2 = q.a % 10;
+    const b1 = Math.floor(q.b / 10), b2 = q.b % 10;
+    const sum = q.a + q.b;
+    const sumD = Math.floor(sum / 100) > 0
+      ? `${Math.floor(sum/100)}${Math.floor((sum%100)/10)}`
+      : `${Math.floor(sum/10)}`;
+    const sumU = sum % 10;
+    // ¿hay acarreo en unidades?
+    const carry = (a2 + b2) >= 10 ? 1 : 0;
+    html = `
+      <div style="position:relative">
+        <button class="hint-btn" onclick="toggleHint()">💡</button>
+        <div class="hint-box" id="hint-box">
+          Paso 1: suma las <strong>unidades</strong> (${a2}+${b2}=${a2+b2}).
+          ${carry ? `Como da ${a2+b2}, escribe <strong>${(a2+b2)%10}</strong> en U y llevas <strong>1</strong> a las decenas.` : ''}
+          Paso 2: suma las <strong>decenas</strong> (${a1}+${b1}${carry?'+1 que llevas':''}).
+        </div>
+        <p class="question-text" style="margin-bottom:0.6rem">¿Cuánto es?</p>
+
+        <!-- Operación visual con casillas de resultado -->
+        <div class="math-op" style="margin-bottom:1.2rem">
+          <!-- Casilla de acarreo -->
+          <div style="display:flex;justify-content:flex-end;min-height:1.8rem;margin-bottom:0.1rem;padding-right:0.1rem">
+            <div id="carry-box" style="width:2.4rem;height:1.8rem;border-radius:8px;background:#fff8e1;border:2px dashed #FFD93D;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1.1rem;color:#e6a800;opacity:0;transition:opacity 0.3s">1</div>
+          </div>
+          <!-- Etiquetas D / U -->
+          <div style="display:flex;align-items:center;gap:0;font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:0.2rem;">
+            <span style="visibility:hidden;min-width:2.6rem">+</span>
+            <span style="min-width:3.2rem;text-align:center;color:#FF6B9D">D</span>
+            <span style="min-width:3.2rem;text-align:center;color:#4ECDC4">U</span>
+          </div>
+          <!-- Fila A -->
+          <div class="math-row" style="gap:0">
+            <span class="math-op-sign" style="visibility:hidden;min-width:2.6rem">+</span>
+            <span class="math-num" style="min-width:3.2rem;text-align:center">${a1}</span>
+            <span class="math-num" style="min-width:3.2rem;text-align:center">${a2}</span>
+          </div>
+          <!-- Fila B -->
+          <div class="math-row" style="gap:0">
+            <span class="math-op-sign op-plus" style="min-width:2.6rem;text-align:center">+</span>
+            <span class="math-num" style="min-width:3.2rem;text-align:center">${b1}</span>
+            <span class="math-num" style="min-width:3.2rem;text-align:center">${b2}</span>
+          </div>
+          <div class="math-line"></div>
+          <!-- Fila resultado con inputs -->
+          <div style="display:flex;align-items:center;gap:0;margin-top:0.4rem">
+            <span style="visibility:hidden;min-width:2.6rem">+</span>
+            <!-- Casilla D (se habilita después o al tocarla) -->
+            <div style="min-width:3.2rem;display:flex;justify-content:center;position:relative">
+              <input type="number" id="inp-d" class="answer-input"
+                style="width:58px;height:62px;font-size:2rem;opacity:0.35;cursor:not-allowed"
+                placeholder="D" min="0" max="99" disabled
+                onkeydown="if(event.key==='Enter') checkAnswer2d()">
+              <!-- Capa táctil encima que activa moveToDecenas si D aún está bloqueada -->
+              <div id="tap-d" onclick="tapDecenas()" style="position:absolute;inset:0;cursor:pointer;border-radius:16px"></div>
+            </div>
+            <!-- Casilla U (activa primero) -->
+            <div style="min-width:3.2rem;display:flex;justify-content:center">
+              <input type="number" id="inp-u" class="answer-input"
+                style="width:58px;height:62px;font-size:2rem"
+                placeholder="U" min="0" max="9"
+                onkeydown="handleU(event)"
+                oninput="onUInput(this)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Instrucción dinámica -->
+        <p id="step-label" style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--purple);margin-bottom:0.8rem">
+          ✏️ Escribe primero las <span style="color:#4ECDC4">Unidades</span>
+        </p>
+
+        <div class="feedback" id="feedback"></div>
+        <button class="btn-check" id="btn-check" onclick="checkAnswer2d()" disabled
+          style="opacity:0.4;cursor:not-allowed">¡Verificar! ✓</button>
+      </div>
+    `;
+  }
+
+  else if (q.type === 'input-num') {
+    html = `
+      <div style="position:relative">
+        <button class="hint-btn" onclick="toggleHint()">💡</button>
+        <div class="hint-box" id="hint-box">${q.hint || '¡Piénsalo bien!'}</div>
+        ${q.svg ? `<div class="geo-display"><div class="geo-shape">${q.svg}</div></div>` : ''}
+        ${q.isProblem ? `<div class="problem-text">${q.q}</div>` : `<p class="question-text">${q.question}</p>`}
+        <input type="number" class="answer-input" id="answer" placeholder="?" min="0" max="999"
+          onkeydown="if(event.key==='Enter') checkAnswer()">
+        <div class="feedback" id="feedback"></div>
+        <button class="btn-check" id="btn-check" onclick="checkAnswer()">¡Verificar! ✓</button>
+      </div>
+    `;
+  }
+
+  else if (q.type === 'choice') {
+    const opts = q.options.map((o, i) => `
+      <button class="option-btn" id="opt-${i}" onclick="checkChoice(${i}, ${o.correct})">
+        <span class="opt-icon">${o.emoji}</span>
+        ${o.text}
+      </button>
+    `).join('');
+    html = `
+      <div style="position:relative">
+        <button class="hint-btn" onclick="toggleHint()">💡</button>
+        <div class="hint-box" id="hint-box">${q.hint || '¡Piénsalo bien!'}</div>
+        ${q.svg ? `<div class="geo-display"><div class="geo-shape">${q.svg}</div></div>` : ''}
+        ${q.isProblem ? `<div class="problem-text">${q.q}</div>` : `<p class="question-text">${q.question}</p>`}
+        <div class="options-grid">${opts}</div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+    `;
+  }
+
+  card.innerHTML = `<div class="question-label" id="q-label">Pregunta ${currentQ + 1} de ${total}</div>` + html;
+
+  // Foco automático al input
+  const inp = document.getElementById('answer');
+  if (inp) setTimeout(() => inp.focus(), 100);
+  // Foco para math2d: primero unidades
+  const inpU = document.getElementById('inp-u');
+  if (inpU) setTimeout(() => inpU.focus(), 100);
+}
+
+// === HELPERS MATH2D ===
+
+function onUInput(el) {
+  // Limitar a 1 dígito (0-9 para la U base; permitir 0-19 momentáneamente si suma >9)
+  const val = el.value.replace(/[^0-9]/g,'');
+  el.value = val.slice(0, 2);
+}
+
+function handleU(e) {
+  if (e.key === 'Enter' || e.key === 'Tab') {
+    e.preventDefault();
+    moveToDecenas();
+  }
+}
+
+function tapDecenas() {
+  // Si D ya está habilitada, quitar la capa y enfocar directamente
+  const inpD = document.getElementById('inp-d');
+  const tapLayer = document.getElementById('tap-d');
+  if (!inpD) return;
+  if (!inpD.disabled) {
+    if (tapLayer) tapLayer.style.display = 'none';
+    inpD.focus();
+    return;
+  }
+  // Si no, primero completar el paso de U
+  moveToDecenas();
+}
+
+function moveToDecenas() {
+  const inpU = document.getElementById('inp-u');
+  const inpD = document.getElementById('inp-d');
+  const stepLabel = document.getElementById('step-label');
+  const btn = document.getElementById('btn-check');
+  if (!inpU || !inpD) return;
+
+  const valU = inpU.value.trim();
+  if (valU === '' || isNaN(parseInt(valU))) {
+    inpU.style.borderColor = 'var(--pink)';
+    inpU.focus();
+    return;
+  }
+
+  const q = questions[currentQ];
+  const a2 = q.a % 10, b2 = q.b % 10;
+  const carry = (a2 + b2) >= 10 ? 1 : 0;
+
+  // Mostrar caja de acarreo si aplica
+  if (carry) {
+    const carryBox = document.getElementById('carry-box');
+    if (carryBox) carryBox.style.opacity = '1';
+  }
+
+  // Habilitar decenas
+  inpD.disabled = false;
+  inpD.style.opacity = '1';
+  inpD.style.cursor = 'text';
+  inpU.disabled = true;
+  inpU.style.opacity = '0.7';
+
+  // Quitar capa táctil
+  const tapLayer = document.getElementById('tap-d');
+  if (tapLayer) tapLayer.style.display = 'none';
+
+  stepLabel.innerHTML = `✏️ Ahora escribe las <span style="color:#FF6B9D">Decenas</span>${carry ? ' <span style="color:#e6a800">(+ 1 que llevas)</span>' : ''}`;
+
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+
+  setTimeout(() => inpD.focus(), 80);
+
+  inpD.onkeydown = (e) => { if (e.key === 'Enter') checkAnswer2d(); };
+}
+
+function checkAnswer2d() {
+  if (answered) { nextQuestion(); return; }
+
+  const inpU = document.getElementById('inp-u');
+  const inpD = document.getElementById('inp-d');
+  const fb = document.getElementById('feedback');
+  const btn = document.getElementById('btn-check');
+  const q = questions[currentQ];
+
+  // Si aún está en el paso U, mover a D primero
+  if (!inpD.disabled === false && inpD.disabled) {
+    moveToDecenas(); return;
+  }
+  if (inpD.disabled) { moveToDecenas(); return; }
+
+  const valU = parseInt(inpU.value);
+  const valD = parseInt(inpD.value);
+
+  if (isNaN(valD)) {
+    inpD.style.borderColor = 'var(--pink)';
+    inpD.focus();
+    fb.className = 'feedback wrong'; fb.style.display='block';
+    fb.textContent = '⚠️ Escribe las decenas primero.';
+    return;
+  }
+
+  answered = true;
+
+  const answer = q.answer;
+  const correctU = answer % 10;
+  // decenas: puede ser 1 o 2 dígitos (ej. 81 → D=8, o 100+ → D=10+)
+  const correctD = Math.floor(answer / 10);
+
+  const userAnswer = valD * 10 + valU;
+  const isCorrect = userAnswer === answer;
+
+  // Colorear inputs
+  if (valU === correctU) inpU.classList.add('correct'); else inpU.classList.add('wrong');
+  if (valD === correctD) inpD.classList.add('correct'); else inpD.classList.add('wrong');
+
+  if (isCorrect) {
+    score++;
+    totalStarsEarned++;
+    fb.className = 'feedback correct';
+    fb.textContent = getRandom(['🎉 ¡Muy bien!','⭐ ¡Correcto!','🌟 ¡Excelente!','🎀 ¡Genial!','✨ ¡Súper!']);
+    spawnConfetti(5);
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = `😅 Era ${answer} (D=${correctD}, U=${correctU}). ¡La próxima!`;
+  }
+
+  document.getElementById('current-score').textContent = score;
+  btn.textContent = currentQ < questions.length - 1 ? 'Siguiente →' : '¡Ver resultado! 🏆';
+}
+
+function toggleHint() {
+  hintVisible = !hintVisible;
+  const hb = document.getElementById('hint-box');
+  if (hb) hb.classList.toggle('visible', hintVisible);
+}
+
+// === VERIFICAR RESPUESTAS ===
+function checkAnswer() {
+  if (answered) { nextQuestion(); return; }
+  const inp = document.getElementById('answer');
+  const val = parseInt(inp.value);
+  const q = questions[currentQ];
+  const fb = document.getElementById('feedback');
+  const btn = document.getElementById('btn-check');
+
+  if (isNaN(val)) { fb.className = 'feedback wrong'; fb.style.display='block'; fb.textContent = '⚠️ Escribe un número primero.'; return; }
+
+  answered = true;
+  const correct = val === q.answer;
+
+  if (correct) {
+    score++;
+    totalStarsEarned++;
+    inp.classList.add('correct');
+    fb.className = 'feedback correct';
+    fb.textContent = getRandom(['🎉 ¡Muy bien!','⭐ ¡Correcto!','🌟 ¡Excelente!','🎀 ¡Genial!','✨ ¡Súper!']);
+    spawnConfetti(5);
+  } else {
+    inp.classList.add('wrong');
+    fb.className = 'feedback wrong';
+    fb.textContent = `😅 Era ${q.answer}. ¡La próxima!`;
+  }
+
+  document.getElementById('current-score').textContent = score;
+  btn.textContent = currentQ < questions.length - 1 ? 'Siguiente →' : '¡Ver resultado! 🏆';
+}
+
+function checkChoice(idx, isCorrect) {
+  if (answered) return;
+  answered = true;
+  const fb = document.getElementById('feedback');
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach(b => b.disabled = true);
+
+  if (isCorrect) {
+    score++;
+    totalStarsEarned++;
+    document.getElementById(`opt-${idx}`).classList.add('correct');
+    fb.className = 'feedback correct';
+    fb.textContent = getRandom(['🎉 ¡Muy bien!','⭐ ¡Correcto!','🌟 ¡Excelente!','🎀 ¡Genial!']);
+    spawnConfetti(5);
+  } else {
+    document.getElementById(`opt-${idx}`).classList.add('wrong');
+    // Marcar la correcta
+    document.querySelectorAll('.option-btn').forEach((b, i) => {
+      if (questions[currentQ].options[i].correct) b.classList.add('correct');
+    });
+    fb.className = 'feedback wrong';
+    fb.textContent = '😅 ¡Casi! Mira la respuesta correcta en verde.';
+  }
+
+  document.getElementById('current-score').textContent = score;
+
+  // Botón siguiente
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn-check';
+  nextBtn.style.marginTop = '1rem';
+  nextBtn.textContent = currentQ < questions.length - 1 ? 'Siguiente →' : '¡Ver resultado! 🏆';
+  nextBtn.onclick = nextQuestion;
+  document.querySelector('#question-card > div').appendChild(nextBtn);
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+// === RESULTADO ===
+function showResult() {
+  document.getElementById('screen-game').style.display = 'none';
+  const screen = document.getElementById('screen-result');
+  screen.style.display = 'flex';
+
+  const pct = score / questions.length;
+  let emoji, title, msg, stars;
+
+  if (pct === 1) { emoji='🏆'; title='¡Perfecta!'; msg='¡10 de 10! ¡Eres una campeona!'; stars='⭐⭐⭐'; }
+  else if (pct >= 0.8) { emoji='🌟'; title='¡Excelente!'; msg='¡Casi todo bien! ¡Eres increíble!'; stars='⭐⭐⭐'; }
+  else if (pct >= 0.6) { emoji='😊'; title='¡Muy bien!'; msg='¡Muy buen trabajo! ¡Sigue practicando!'; stars='⭐⭐'; }
+  else if (pct >= 0.4) { emoji='💪'; title='¡Buen intento!'; msg='¡Puedes mejorar! ¡Inténtalo de nuevo!'; stars='⭐'; }
+  else { emoji='🤗'; title='¡No te rindas!'; msg='¡Practica un poco más y lo lograrás!'; stars='⭐'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score-display').textContent = `${score}/${questions.length}`;
+  document.getElementById('total-stars').textContent = totalStarsEarned;
+
+  if (pct >= 0.8) spawnConfetti(30);
+}
+
+// === CONFETI ===
+function spawnConfetti(count) {
+  const colors = ['#FF6B9D','#FFD93D','#4ECDC4','#A855F7','#6BCB77','#FF9A3C'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = (10 + Math.random() * 80) + '%';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.width = (8 + Math.random() * 8) + 'px';
+      c.style.height = (8 + Math.random() * 8) + 'px';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }, i * 80);
+  }
+}
+
+function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+</script>
+</body>
+</html>
