@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exámenes de Emi 🌟 - 1° B</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF6B9D;
+    --yellow: #FFD93D;
+    --blue: #4ECDC4;
+    --purple: #A855F7;
+    --green: #6BCB77;
+    --orange: #FF9A3C;
+    --bg: #FFF5F9;
+    --dark: #2D2D44;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255,107,157,0.1) 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(78,205,196,0.1) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(168,85,247,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #floaters {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .floater {
+    position: absolute;
+    animation: floatUp linear infinite;
+    opacity: 0.5;
+    font-size: 1.4rem;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(105vh) rotate(0deg);   opacity: 0; }
+    10%  { opacity: 0.5; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(-10vh)  rotate(360deg); opacity: 0; }
+  }
+
+  /* ── HERO ─────────────────────────────── */
+  .hero {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 3.5rem 1.5rem 2rem;
+  }
+
+  .hero-emoji { font-size: 5rem; display: block; margin-bottom: 0.6rem;
+    animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0);    }
+    50%      { transform: translateY(-10px); }
+  }
+
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2.2rem, 7vw, 3.8rem);
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-sub {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    color: var(--purple);
+    opacity: 0.8;
+    margin-bottom: 1.2rem;
+  }
+
+  .badge-grado {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--dark);
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 0.4rem 1.4rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 14px rgba(255,217,61,0.4);
+  }
+
+  /* ── GRID ─────────────────────────────── */
+  .section-label {
+    position: relative; z-index: 10;
+    text-align: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #bbb;
+    margin: 2rem 0 1.2rem;
+  }
+
+  .grid {
+    position: relative; z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.4rem;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  .card {
+    background: white;
+    border-radius: 28px;
+    padding: 2rem 1.5rem 1.8rem;
+    text-decoration: none;
+    color: var(--dark);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+    border: 3px solid transparent;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+                box-shadow 0.25s ease,
+                border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card-ingles { border-color: var(--blue); }
+  .card-ingles::after  { background: linear-gradient(145deg,rgba(78,205,196,.07),rgba(107,203,119,.07)); }
+  .card-mates  { border-color: var(--pink); }
+  .card-mates::after   { background: linear-gradient(145deg,rgba(255,107,157,.07),rgba(168,85,247,.07)); }
+
+  .card:hover { transform: translateY(-8px) scale(1.02);
+                box-shadow: 0 18px 50px rgba(0,0,0,0.12); }
+  .card:hover::after { opacity: 1; }
+
+  .card-icon {
+    font-size: 4.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.1));
+    margin-bottom: 0.2rem;
+  }
+
+  .card-tag {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.25rem 0.9rem;
+    border-radius: 50px;
+    margin-bottom: 0.2rem;
+  }
+  .card-ingles .card-tag { background:#e0faf8; color: #0a9488; }
+  .card-mates  .card-tag { background:#fde8f1; color: #c9175a; }
+
+  .card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.7rem;
+    color: var(--dark);
+    margin-bottom: 0.1rem;
+  }
+
+  .card p {
+    font-size: 0.93rem;
+    color: #777;
+    line-height: 1.5;
+    max-width: 240px;
+  }
+
+  .card-cta {
+    margin-top: 0.8rem;
+    display: inline-block;
+    padding: 0.6rem 1.6rem;
+    border-radius: 50px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    color: white;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card-ingles .card-cta {
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    box-shadow: 0 4px 16px rgba(78,205,196,0.4);
+  }
+  .card-mates .card-cta {
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    box-shadow: 0 4px 16px rgba(255,107,157,0.4);
+  }
+  .card:hover .card-cta { transform: scale(1.05); box-shadow: 0 8px 22px rgba(0,0,0,0.2); }
+
+  /* ── PRÓXIMAMENTE ─────────────────────── */
+  .card-coming {
+    border-color: #e8e8f0 !important;
+    opacity: 0.6;
+    cursor: default;
+    pointer-events: none;
+  }
+  .card-coming .card-tag { background:#f0f0f8; color:#aaa; }
+  .card-coming h2 { color:#bbb; }
+  .card-coming .card-cta {
+    background: #e0e0e8;
+    box-shadow: none;
+    color: #aaa;
+  }
+
+  /* ── FOOTER ───────────────────────────── */
+  footer {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.85rem;
+    color: #ccc;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div id="floaters"></div>
+
+<div class="hero">
+  <span class="hero-emoji">🌟</span>
+  <h1>Exámenes de Emi</h1>
+  <p class="hero-sub">¡Practica y repasa con juegos! ✨</p>
+  <span class="badge-grado">1° B · Primaria</span>
+</div>
+
+<p class="section-label">Elige una materia</p>
+
+<div class="grid">
+
+  <!-- INGLÉS -->
+  <a class="card card-ingles" href="ingles/index.html">
+    <div class="card-icon">🇺🇸</div>
+    <span class="card-tag">Inglés</span>
+    <h2>English Time!</h2>
+    <p>Colores, números, animales, el abecedario y vocabulario básico en inglés.</p>
+    <span class="card-cta">¡Jugar! →</span>
+  </a>
+
+  <!-- MATEMÁTICAS -->
+  <a class="card card-mates" href="matematicas/index.html">
+    <div class="card-icon">🔢</div>
+    <span class="card-tag">Matemáticas</span>
+    <h2>¡Matemáticas!</h2>
+    <p>Sumas, restas, sumas con transformación, figuras geométricas y medidas.</p>
+    <span class="card-cta">¡Jugar! →</span>
+  </a>
+
+</div>
+
+<footer>Hecho con 💖 para Emi · 1° B</footer>
+
+<script>
+  const emojis = ['⭐','✨','🌟','💫','🎀','🌸','🎈','🦋','🌺','🎀'];
+  const container = document.getElementById('floaters');
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.className = 'floater';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = (Math.random() * 100) + '%';
+    el.style.animationDuration = (10 + Math.random() * 14) + 's';
+    el.style.animationDelay  = (Math.random() * 18) + 's';
+    el.style.fontSize = (0.9 + Math.random() * 1.3) + 'rem';
+    container.appendChild(el);
+  }
+</script>
+</body>
+</html>
