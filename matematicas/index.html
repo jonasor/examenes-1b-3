@@ -556,6 +556,17 @@
   <div class="title-badge">¡Matemáticas!</div>
   <div class="subtitle">con Emi ✨</div>
 
+  <button onclick="goExamMenu()" style="
+    background:white; border:2.5px solid var(--purple); border-radius:50px;
+    padding:0.5rem 1.4rem; font-family:'Fredoka One',cursive; font-size:1rem;
+    color:var(--purple); cursor:pointer; margin-bottom:1.2rem;
+    box-shadow:0 3px 12px rgba(168,85,247,0.15);
+    transition:transform 0.2s, box-shadow 0.2s;
+    display:inline-flex; align-items:center; gap:0.4rem;
+  " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+    📚 Lista de exámenes
+  </button>
+
   <div class="stars-display">
     ⭐ Estrellas: <span id="total-stars">0</span>
   </div>
@@ -589,7 +600,10 @@
 <!-- PANTALLA JUEGO -->
 <div id="screen-game">
   <div class="game-header">
-    <button class="btn-back" onclick="goHome()">🏠 Menú</button>
+    <div style="display:flex;gap:0.4rem;align-items:center">
+      <button class="btn-back" onclick="goHome()">🏠 Materias</button>
+      <button class="btn-back" onclick="goExamMenu()" style="border-color:var(--purple);color:var(--purple)">📚 Exámenes</button>
+    </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
     </div>
