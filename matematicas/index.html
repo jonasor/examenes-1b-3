@@ -885,80 +885,62 @@ function renderQuestion() {
   else if (q.type === 'math2d') {
     const a1 = Math.floor(q.a / 10), a2 = q.a % 10;
     const b1 = Math.floor(q.b / 10), b2 = q.b % 10;
-    const sum = q.a + q.b;
-    const sumD = Math.floor(sum / 100) > 0
-      ? `${Math.floor(sum/100)}${Math.floor((sum%100)/10)}`
-      : `${Math.floor(sum/10)}`;
-    const sumU = sum % 10;
-    // ¿hay acarreo en unidades?
     const carry = (a2 + b2) >= 10 ? 1 : 0;
-    html = `
-      <div style="position:relative">
-        <button class="hint-btn" onclick="toggleHint()">💡</button>
-        <div class="hint-box" id="hint-box">
-          💡 U: ${a2}+${b2}=${a2+b2} → escribe <strong>${(a2+b2)%10 !== (a2+b2) ? (a2+b2)%10+' (llevas 1)' : a2+b2}</strong> en U.<br>
-          💡 D: ${a1}+${b1}${carry ? '+ 1 que llevas' : ''} = <strong>${correctD}</strong>.
-        </div>
-        <p class="question-text" style="margin-bottom:0.6rem">¿Cuánto es?</p>
-
-        <!-- Operación visual con casillas de resultado -->
-        <div class="math-op" style="margin-bottom:1.2rem">
-          <!-- Casilla de acarreo -->
-          <div style="display:flex;justify-content:flex-end;min-height:1.8rem;margin-bottom:0.1rem;padding-right:0.1rem">
-            <div id="carry-box" style="width:2.4rem;height:1.8rem;border-radius:8px;background:#fff8e1;border:2px dashed #FFD93D;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1.1rem;color:#e6a800;opacity:0;transition:opacity 0.3s">1</div>
-          </div>
-          <!-- Etiquetas D / U -->
-          <div style="display:flex;align-items:center;gap:0;font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:0.2rem;">
-            <span style="visibility:hidden;min-width:2.6rem">+</span>
-            <span style="min-width:3.2rem;text-align:center;color:#FF6B9D">D</span>
-            <span style="min-width:3.2rem;text-align:center;color:#4ECDC4">U</span>
-          </div>
-          <!-- Fila A -->
-          <div class="math-row" style="gap:0">
-            <span class="math-op-sign" style="visibility:hidden;min-width:2.6rem">+</span>
-            <span class="math-num" style="min-width:3.2rem;text-align:center">${a1}</span>
-            <span class="math-num" style="min-width:3.2rem;text-align:center">${a2}</span>
-          </div>
-          <!-- Fila B -->
-          <div class="math-row" style="gap:0">
-            <span class="math-op-sign op-plus" style="min-width:2.6rem;text-align:center">+</span>
-            <span class="math-num" style="min-width:3.2rem;text-align:center">${b1}</span>
-            <span class="math-num" style="min-width:3.2rem;text-align:center">${b2}</span>
-          </div>
-          <div class="math-line"></div>
-          <!-- Fila resultado con inputs -->
-          <div style="display:flex;align-items:center;gap:0;margin-top:0.4rem">
-            <span style="visibility:hidden;min-width:2.6rem">+</span>
-            <!-- Casilla D (se habilita después o al tocarla) -->
-            <div style="min-width:3.2rem;display:flex;justify-content:center;position:relative">
-              <input type="number" id="inp-d" class="answer-input"
-                style="width:58px;height:62px;font-size:2rem;opacity:0.35;cursor:not-allowed"
-                placeholder="D" min="0" max="99" disabled
-                onkeydown="if(event.key==='Enter') checkAnswer2d()">
-              <!-- Capa táctil encima que activa moveToDecenas si D aún está bloqueada -->
-              <div id="tap-d" onclick="tapDecenas()" style="position:absolute;inset:0;cursor:pointer;border-radius:16px"></div>
-            </div>
-            <!-- Casilla U (activa primero) -->
-            <div style="min-width:3.2rem;display:flex;justify-content:center">
-              <input type="number" id="inp-u" class="answer-input"
-                style="width:58px;height:62px;font-size:2rem"
-                placeholder="U" min="0" max="9"
-                onkeydown="handleU(event)"
-                oninput="onUInput(this)">
-            </div>
-          </div>
-        </div>
-
-        <!-- Instrucción dinámica -->
-        <p id="step-label" style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--purple);margin-bottom:0.8rem">
-          ✏️ Escribe el dígito de <span style="color:#4ECDC4">Unidades</span> <span style="font-size:0.8rem;color:#aaa">(un solo número: 0-9)</span>
-        </p>
-
-        <div class="feedback" id="feedback"></div>
-        <button class="btn-check" id="btn-check" onclick="checkAnswer2d()" disabled
-          style="opacity:0.4;cursor:not-allowed">¡Verificar! ✓</button>
-      </div>
-    `;
+    const correctU = q.answer % 10;
+    const correctD = Math.floor(q.answer / 10);
+    // Texto del hint construido en JS puro (sin template literals anidados problemáticos)
+    const hintU = carry
+      ? 'U: ' + a2 + '+' + b2 + '=' + (a2+b2) + ' → escribe solo <strong>' + ((a2+b2)%10) + '</strong> (llevas 1)'
+      : 'U: ' + a2 + '+' + b2 + ' = <strong>' + (a2+b2) + '</strong>';
+    const hintD = 'D: ' + a1 + '+' + b1 + (carry ? '+1' : '') + ' = <strong>' + correctD + '</strong>';
+    html = '<div style="position:relative">'
+      + '<button class="hint-btn" onclick="toggleHint()">💡</button>'
+      + '<div class="hint-box" id="hint-box">💡 ' + hintU + '<br>💡 ' + hintD + '</div>'
+      + '<p class="question-text" style="margin-bottom:0.6rem">¿Cuánto es?</p>'
+      + '<div class="math-op" style="margin-bottom:1.2rem">'
+        // Casilla acarreo
+        + '<div style="display:flex;justify-content:flex-end;min-height:1.8rem;margin-bottom:0.1rem;padding-right:0.3rem">'
+          + '<div id="carry-box" style="width:2.4rem;height:1.8rem;border-radius:8px;background:#fff8e1;border:2px dashed #FFD93D;display:flex;align-items:center;justify-content:center;font-family:Fredoka One,cursive;font-size:1.1rem;color:#e6a800;opacity:0;transition:opacity 0.3s">1</div>'
+        + '</div>'
+        // Etiquetas D / U
+        + '<div style="display:flex;align-items:center;gap:0;font-family:Fredoka One,cursive;font-size:0.9rem;margin-bottom:0.2rem;">'
+          + '<span style="visibility:hidden;min-width:2.6rem">+</span>'
+          + '<span style="min-width:3.2rem;text-align:center;color:#FF6B9D">D</span>'
+          + '<span style="min-width:3.2rem;text-align:center;color:#4ECDC4">U</span>'
+        + '</div>'
+        // Fila A
+        + '<div class="math-row" style="gap:0">'
+          + '<span class="math-op-sign" style="visibility:hidden;min-width:2.6rem">+</span>'
+          + '<span class="math-num" style="min-width:3.2rem;text-align:center">' + a1 + '</span>'
+          + '<span class="math-num" style="min-width:3.2rem;text-align:center">' + a2 + '</span>'
+        + '</div>'
+        // Fila B
+        + '<div class="math-row" style="gap:0">'
+          + '<span class="math-op-sign op-plus" style="min-width:2.6rem;text-align:center">+</span>'
+          + '<span class="math-num" style="min-width:3.2rem;text-align:center">' + b1 + '</span>'
+          + '<span class="math-num" style="min-width:3.2rem;text-align:center">' + b2 + '</span>'
+        + '</div>'
+        + '<div class="math-line"></div>'
+        // Fila inputs resultado
+        + '<div style="display:flex;align-items:center;gap:0;margin-top:0.4rem">'
+          + '<span style="visibility:hidden;min-width:2.6rem">+</span>'
+          // Casilla D
+          + '<div style="min-width:3.2rem;display:flex;justify-content:center;position:relative">'
+            + '<input type="number" id="inp-d" class="answer-input" style="width:58px;height:62px;font-size:2rem;opacity:0.35;cursor:not-allowed" placeholder="D" min="0" max="99" disabled>'
+            + '<div id="tap-d" onclick="tapDecenas()" style="position:absolute;inset:0;cursor:pointer;border-radius:16px"></div>'
+          + '</div>'
+          // Casilla U
+          + '<div style="min-width:3.2rem;display:flex;justify-content:center">'
+            + '<input type="number" id="inp-u" class="answer-input" style="width:58px;height:62px;font-size:2rem" placeholder="U" min="0" max="9" onkeydown="handleU(event)" oninput="onUInput(this)">'
+          + '</div>'
+        + '</div>'
+      + '</div>'
+      + '<p id="step-label" style="font-family:Fredoka One,cursive;font-size:1rem;color:var(--purple);margin-bottom:0.8rem">'
+        + '✏️ Escribe el dígito de <span style="color:#4ECDC4">Unidades</span> <span style="font-size:0.8rem;color:#aaa">(0–9)</span>'
+      + '</p>'
+      + '<div class="feedback" id="feedback"></div>'
+      + '<button class="btn-check" id="btn-check" onclick="checkAnswer2d()" disabled style="opacity:0.4;cursor:not-allowed">¡Verificar! ✓</button>'
+      + '</div>';
   }
 
   else if (q.type === 'input-num') {
