@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌟 Emilia aprende inglés: There is / There are 🌟</title>
+<style>
+  :root{
+    --pink:#ff6fb5; --purple:#9b5de5; --blue:#00bbf9; --green:#48d597;
+    --yellow:#ffd166; --orange:#ff9f1c; --red:#ff5d73;
+    --soft:#fff6fb; --ink:#3a2e4f;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Comic Sans MS','Baloo 2','Trebuchet MS',system-ui,sans-serif;
+    background:linear-gradient(135deg,#ffe6f2 0%, #e6f7ff 50%, #e9ffe6 100%);
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  /* floating background bubbles */
+  .bg{position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;}
+  .bg span{position:absolute; bottom:-60px; font-size:34px; opacity:.5;
+    animation:rise linear infinite;}
+  @keyframes rise{to{transform:translateY(-120vh) rotate(360deg); opacity:0;}}
+
+  .wrap{position:relative; z-index:1; max-width:760px; margin:0 auto; padding:16px;}
+
+  header{text-align:center; padding:10px 0 4px;}
+  header h1{
+    margin:6px 0; font-size:clamp(26px,6vw,42px);
+    color:var(--purple);
+    text-shadow:2px 2px 0 #fff, 4px 4px 0 rgba(155,93,229,.25);
+  }
+  header p{margin:0; font-size:16px; color:var(--ink);}
+  .hello{font-size:18px; font-weight:bold; color:var(--pink);}
+
+  /* progress + stars */
+  .topbar{
+    display:flex; align-items:center; gap:10px; justify-content:space-between;
+    background:#fff; border-radius:20px; padding:10px 14px; margin:12px 0;
+    box-shadow:0 6px 0 rgba(155,93,229,.18);
+  }
+  .stars{font-size:22px; letter-spacing:2px;}
+  .scorebox{font-weight:bold; color:var(--purple); font-size:16px;}
+  .bar{flex:1; height:18px; background:#ffe1ee; border-radius:20px; overflow:hidden; margin:0 6px;}
+  .bar > i{display:block; height:100%; width:0%;
+    background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));
+    transition:width .4s ease;}
+
+  /* menu cards */
+  .menu{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;}
+  .card{
+    background:#fff; border:none; border-radius:24px; padding:18px 12px;
+    font-family:inherit; font-size:17px; font-weight:bold; color:var(--ink);
+    cursor:pointer; text-align:center; transition:transform .12s;
+    box-shadow:0 7px 0 rgba(0,0,0,.10);
+  }
+  .card .ic{font-size:40px; display:block; margin-bottom:6px;}
+  .card:active{transform:translateY(4px); box-shadow:0 3px 0 rgba(0,0,0,.10);}
+  .card.c1{background:#fff0f6;} .card.c2{background:#eafff3;}
+  .card.c3{background:#eaf6ff;} .card.c4{background:#fff8e6;}
+  .card.done{outline:3px solid var(--green);}
+  .card .badge{font-size:13px; color:var(--green); display:block; margin-top:4px;}
+
+  /* rule box */
+  .rule{
+    background:#fff; border-radius:22px; padding:16px; margin:14px 0;
+    box-shadow:0 6px 0 rgba(0,0,0,.07); line-height:1.5;
+  }
+  .rule b.is{color:var(--blue);} .rule b.are{color:var(--orange);}
+  .chip{display:inline-block; padding:3px 10px; border-radius:14px; font-weight:bold; margin:2px;}
+  .chip.is{background:#d6f0ff; color:#0077b6;}
+  .chip.are{background:#ffe7c2; color:#c25e00;}
+
+  /* game screen */
+  .screen{display:none;}
+  .screen.active{display:block; animation:pop .3s ease;}
+  @keyframes pop{from{transform:scale(.96); opacity:0;} to{transform:scale(1); opacity:1;}}
+
+  .qcard{
+    background:#fff; border-radius:26px; padding:22px 18px; text-align:center;
+    box-shadow:0 8px 0 rgba(0,0,0,.08); margin-top:6px;
+  }
+  .qnum{font-size:14px; color:var(--purple); font-weight:bold;}
+  .emoji{font-size:72px; margin:6px 0; line-height:1;}
+  .qtext{font-size:26px; font-weight:bold; margin:6px 0 4px;}
+  .qhint{font-size:15px; color:#8a7fa3; margin-bottom:14px;}
+
+  .answers{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .ans{
+    font-family:inherit; font-weight:bold; font-size:22px; cursor:pointer;
+    border:none; border-radius:20px; padding:18px 8px; color:#fff;
+    box-shadow:0 6px 0 rgba(0,0,0,.18); transition:transform .1s;
+  }
+  .ans.is{background:linear-gradient(180deg,#48cae4,#0096c7);}
+  .ans.are{background:linear-gradient(180deg,#ffb703,#fb8500);}
+  .ans.tfyes{background:linear-gradient(180deg,#48d597,#15a35a);}
+  .ans.tfno{background:linear-gradient(180deg,#ff7a90,#e63950);}
+
+  /* name input */
+  .nameinput{
+    font-family:inherit; font-size:24px; text-align:center; padding:14px 16px;
+    border:3px solid var(--purple); border-radius:20px; width:82%; max-width:300px;
+    margin:14px 0; outline:none; color:var(--ink);
+  }
+  .nameinput:focus{border-color:var(--pink); box-shadow:0 0 0 4px rgba(255,111,181,.2);}
+  .ans:active{transform:translateY(4px); box-shadow:0 2px 0 rgba(0,0,0,.18);}
+  .ans:disabled{opacity:.55;}
+  .ans.correct{outline:5px solid #16c98d; animation:wiggle .4s;}
+  .ans.wrong{outline:5px solid #ff4d6d; opacity:.6;}
+  @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+
+  .feedback{min-height:30px; font-size:20px; font-weight:bold; margin-top:14px;}
+  .feedback.good{color:var(--green);} .feedback.bad{color:var(--red);}
+
+  /* spelling / build sentence */
+  .build{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:14px 0;}
+  .word{
+    font-family:inherit; font-weight:bold; font-size:18px; padding:10px 14px;
+    border:none; border-radius:16px; cursor:pointer; background:#efe5ff; color:var(--purple);
+    box-shadow:0 4px 0 rgba(0,0,0,.12);
+  }
+  .word:active{transform:translateY(3px);}
+  .word.used{opacity:.3; pointer-events:none;}
+  .slot{
+    min-height:54px; background:#fff; border:3px dashed #c9b8ec; border-radius:16px;
+    padding:10px; font-size:20px; font-weight:bold; color:var(--ink); margin:10px 0;
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;
+  }
+
+  /* buttons */
+  .row{display:flex; gap:10px; margin-top:16px; justify-content:center; flex-wrap:wrap;}
+  .btn{
+    font-family:inherit; font-weight:bold; font-size:17px; cursor:pointer;
+    border:none; border-radius:18px; padding:13px 22px; color:#fff;
+    box-shadow:0 5px 0 rgba(0,0,0,.15); transition:transform .1s;
+  }
+  .btn:active{transform:translateY(3px); box-shadow:0 2px 0 rgba(0,0,0,.15);}
+  .btn.p{background:var(--purple);} .btn.g{background:var(--green);}
+  .btn.b{background:var(--blue);} .btn.o{background:var(--orange);} .btn.gray{background:#9a8fb0;}
+
+  /* result screen */
+  .result{background:#fff; border-radius:26px; padding:26px; text-align:center;
+    box-shadow:0 8px 0 rgba(0,0,0,.08);}
+  .result .big{font-size:64px;}
+  .result h2{color:var(--purple); margin:8px 0;}
+  .bigstars{font-size:40px; letter-spacing:4px; margin:8px 0;}
+
+  /* celebration overlay */
+  .confetti{position:fixed; top:-20px; font-size:24px; z-index:50; pointer-events:none;
+    animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(540deg);}}
+
+  footer{text-align:center; font-size:13px; color:#8a7fa3; padding:18px 0;}
+  .mascot{font-size:30px;}
+</style>
+</head>
+<body>
+<div class="bg" id="bg"></div>
+
+<div class="wrap">
+  <header>
+    <div class="mascot">🤖✏️📚</div>
+    <h1>There is / There are</h1>
+    <p class="hello" id="hello">¡Hola, Emilia! 💖</p>
+    <p>Practica inglés jugando 🎮</p>
+  </header>
+
+  <div class="topbar">
+    <span class="stars" id="starline">⭐⭐⭐</span>
+    <div class="bar"><i id="barfill"></i></div>
+    <span class="scorebox" id="scorebox">0 ⭐</span>
+  </div>
+
+  <!-- ================= WELCOME (pide el nombre) ================= -->
+  <section class="screen active" id="welcome">
+    <div class="qcard" style="margin-top:24px;">
+      <div class="emoji">🌈✨</div>
+      <div class="qtext">¡Hola! ¿Cómo te llamas?</div>
+      <div class="qhint">Escribe tu nombre para empezar a jugar 😊</div>
+      <input id="nameInput" class="nameinput" maxlength="14" placeholder="Tu nombre"
+             autocomplete="off" autocorrect="off">
+      <div class="feedback" id="nameMsg"></div>
+      <div class="row">
+        <button class="btn g" onclick="saveName()">¡Empezar! 🚀</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MENU ================= -->
+  <section class="screen" id="menu">
+    <div class="rule">
+      <div style="font-size:18px; font-weight:bold; color:var(--purple); margin-bottom:6px;">📖 La regla mágica</div>
+      Usamos <span class="chip is">There is</span> cuando hay <b class="is">UNO</b> (a / an).<br>
+      <span style="font-size:14px;">Ejemplo: <b>There is</b> a robot 🤖 (1 robot)</span>
+      <hr style="border:none; border-top:2px dashed #eee; margin:10px 0;">
+      Usamos <span class="chip are">There are</span> cuando hay <b class="are">MUCHOS</b> (2, 3, 4...).<br>
+      <span style="font-size:14px;">Ejemplo: <b>There are</b> four books 📚📚 (4 libros)</span>
+    </div>
+
+    <div class="menu">
+      <button class="card c1" id="m1" onclick="startGame('main')">
+        <span class="ic">🖥️</span> Juego 1<br>¿Is o Are?
+        <span class="badge" id="b1"></span>
+      </button>
+      <button class="card c2" id="m2" onclick="startGame('tf')">
+        <span class="ic">🕵️</span> Juego 2<br>¿Bien o mal?
+        <span class="badge" id="b2"></span>
+      </button>
+      <button class="card c3" id="m3" onclick="startGame('build')">
+        <span class="ic">🧩</span> Juego 3<br>Arma la frase
+        <span class="badge" id="b3"></span>
+      </button>
+      <button class="card c4" id="m4" onclick="startGame('quiz')">
+        <span class="ic">🏆</span> Examen<br>¡El gran reto!
+        <span class="badge" id="b4"></span>
+      </button>
+    </div>
+
+    <div class="row">
+      <button class="btn b" onclick="shareGame()">📤 Compartir</button>
+      <button class="btn o" onclick="changeName()">✏️ Cambiar nombre</button>
+      <button class="btn gray" onclick="resetAll()">🔄 Reiniciar</button>
+    </div>
+  </section>
+
+  <!-- ================= QUESTION GAME (main / count / quiz) ================= -->
+  <section class="screen" id="play">
+    <div class="qcard">
+      <div class="qnum" id="qnum">Pregunta 1 de 12</div>
+      <div class="emoji" id="emoji">🤖</div>
+      <div class="qtext" id="qtext">_______ a robot.</div>
+      <div class="qhint" id="qhint">¿Hay uno o muchos?</div>
+      <div class="answers">
+        <button class="ans is" onclick="answer('is',this)">There is</button>
+        <button class="ans are" onclick="answer('are',this)">There are</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="row">
+      <button class="btn gray" onclick="goMenu()">⬅️ Menú</button>
+      <button class="btn g" id="nextbtn" style="display:none" onclick="nextQ()">Siguiente ➡️</button>
+    </div>
+  </section>
+
+  <!-- ================= DETECTIVE / TRUE-FALSE GAME ================= -->
+  <section class="screen" id="playtf">
+    <div class="qcard">
+      <div class="qnum" id="tfnum">Detective 1 de 12</div>
+      <div class="emoji" id="tfemoji">📚</div>
+      <div class="qtext" id="tfsentence">There is four books.</div>
+      <div class="qhint">🕵️ ¿La frase está BIEN o MAL escrita?</div>
+      <div class="answers">
+        <button class="ans tfyes" onclick="answerTF(true,this)">👍 ¡Bien!</button>
+        <button class="ans tfno" onclick="answerTF(false,this)">👎 ¡Mal!</button>
+      </div>
+      <div class="feedback" id="tffeedback"></div>
+    </div>
+    <div class="row">
+      <button class="btn gray" onclick="goMenu()">⬅️ Menú</button>
+      <button class="btn g" id="tfnext" style="display:none" onclick="nextTF()">Siguiente ➡️</button>
+    </div>
+  </section>
+
+  <!-- ================= BUILD SENTENCE GAME ================= -->
+  <section class="screen" id="playbuild">
+    <div class="qcard">
+      <div class="qnum" id="bqnum">Frase 1 de 6</div>
+      <div class="emoji" id="bemoji">📚</div>
+      <div class="qhint">Toca las palabras en orden para armar la frase 👇</div>
+      <div class="slot" id="slot"></div>
+      <div class="build" id="bank"></div>
+      <div class="feedback" id="bfeedback"></div>
+    </div>
+    <div class="row">
+      <button class="btn gray" onclick="goMenu()">⬅️ Menú</button>
+      <button class="btn o" onclick="clearSlot()">🧹 Borrar</button>
+      <button class="btn g" id="bnext" style="display:none" onclick="nextBuild()">Siguiente ➡️</button>
+    </div>
+  </section>
+
+  <!-- ================= RESULT ================= -->
+  <section class="screen" id="result">
+    <div class="result">
+      <div class="big" id="rface">🎉</div>
+      <h2 id="rtitle">¡Muy bien, Emilia!</h2>
+      <div class="bigstars" id="rstars">⭐⭐⭐</div>
+      <p id="rtext">Acertaste 12 de 12.</p>
+      <div class="row">
+        <button class="btn b" id="ragain" onclick="repeatGame()">🔁 Otra vez</button>
+        <button class="btn p" onclick="goMenu()">🏠 Menú</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>Hecho con 💜 para <span id="footerName">ti</span> · ¡a aprender inglés!</footer>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+// Cada objeto: emoji, palabra, cantidad, respuesta correcta
+const ITEMS = [
+  {e:"🧽🧽🧽🧽", w:"four erasers", n:4, a:"are"},
+  {e:"🤖",        w:"a robot",      n:1, a:"is"},
+  {e:"🖊️🖊️",     w:"two pens",     n:2, a:"are"},
+  {e:"📚📚📚📚",  w:"four books",   n:4, a:"are"},
+  {e:"✏️✏️✏️✏️✏️✏️", w:"six pencils", n:6, a:"are"},
+  {e:"💻",        w:"a laptop",     n:1, a:"is"},
+  {e:"📏",        w:"a ruler",      n:1, a:"is"},
+  {e:"🪑",        w:"a chair",      n:1, a:"is"},
+  {e:"🖍️🖍️🖍️🖍️🖍️", w:"five crayons", n:5, a:"are"},
+  {e:"💡",        w:"a lamp",       n:1, a:"is"},
+  {e:"✂️✂️",      w:"two scissors", n:2, a:"are"},
+  {e:"⏰",        w:"an alarm clock",n:1, a:"is"}
+];
+
+/* ---------------- STATE ---------------- */
+let mode = 'main';
+let order = [];
+let idx = 0;
+let correctThisGame = 0;
+let totalStars = 0;
+let playerName = '';
+let done = {main:false, tf:false, build:false, quiz:false};
+let tfShownVerb = 'is';   // verbo mostrado en el juego Detective
+
+/* persistence */
+function load(){
+  try{
+    const s = JSON.parse(localStorage.getItem('emilia_eng')||'{}');
+    totalStars = s.stars||0;
+    done = Object.assign({main:false, tf:false, build:false, quiz:false}, s.done||{});
+    playerName = s.name||'';
+  }catch(e){}
+}
+function save(){
+  localStorage.setItem('emilia_eng', JSON.stringify({stars:totalStars, done:done, name:playerName}));
+}
+
+/* ---------------- HELPERS ---------------- */
+const $ = id => document.getElementById(id);
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function show(screenId){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(screenId).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateTopbar(){
+  $('scorebox').textContent = totalStars + ' ⭐';
+  const max = ITEMS.length*2 + 12 + 6; // aprox total posible
+  const pct = Math.min(100, Math.round(totalStars/max*100));
+  $('barfill').style.width = pct + '%';
+  const filled = Math.min(5, Math.floor(totalStars/8));
+  $('starline').textContent = '⭐'.repeat(filled) + '☆'.repeat(5-filled);
+}
+function updateBadges(){
+  [['main','b1','m1'],['tf','b2','m2'],['build','b3','m3'],['quiz','b4','m4']].forEach(([k,b,m])=>{
+    if(done[k]){ $(b).textContent='✅ ¡Logrado!'; $(m).classList.add('done'); }
+    else { $(b).textContent=''; $(m).classList.remove('done'); }
+  });
+}
+
+/* ---------------- SOUND (Web Audio, no files) ---------------- */
+let actx = null;
+function beep(freqs, dur){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    let t = actx.currentTime;
+    freqs.forEach((f,i)=>{
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type='triangle'; o.frequency.value=f;
+      o.connect(g); g.connect(actx.destination);
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.25,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.start(t); o.stop(t+dur);
+      t += dur*0.9;
+    });
+  }catch(e){}
+}
+const sndGood = ()=>beep([523,659,784],0.13);   // do-mi-sol feliz
+const sndYay  = ()=>beep([523,659,784,1046],0.16);
+const sndBad  = ()=>beep([300,200],0.18);
+
+/* ---------------- CONFETTI ---------------- */
+function confetti(){
+  const ems = ['🎉','⭐','💖','🌈','✨','🎈','🦄'];
+  for(let i=0;i<26;i++){
+    const c = document.createElement('div');
+    c.className='confetti';
+    c.textContent = ems[Math.floor(Math.random()*ems.length)];
+    c.style.left = Math.random()*100+'vw';
+    c.style.animationDuration = (1.5+Math.random()*1.5)+'s';
+    c.style.fontSize = (18+Math.random()*22)+'px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3200);
+  }
+}
+
+/* ---------------- GAME FLOW ---------------- */
+/* ---------- NAME / SHARE ---------- */
+function applyName(){
+  $('hello').textContent = `¡Hola, ${playerName}! 💖`;
+  $('footerName').textContent = playerName;
+}
+function saveName(){
+  const v = $('nameInput').value.trim().replace(/\s+/g,' ');
+  if(!v){
+    $('nameMsg').className='feedback bad';
+    $('nameMsg').textContent='Escribe tu nombre 😊';
+    $('nameInput').focus();
+    return;
+  }
+  playerName = v.charAt(0).toUpperCase()+v.slice(1);
+  save(); applyName();
+  updateBadges(); updateTopbar();
+  show('menu');
+}
+function changeName(){
+  $('nameInput').value = playerName;
+  $('nameMsg').textContent='';
+  show('welcome');
+  setTimeout(()=>$('nameInput').focus(), 300);
+}
+function shareGame(){
+  const data = {
+    title:'Juego de inglés: There is / There are',
+    text:`¡${playerName} te invita a jugar y aprender inglés! 🌟`,
+    url: location.href
+  };
+  if(navigator.share){
+    navigator.share(data).catch(()=>{});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(location.href)
+      .then(()=>alert('¡Enlace copiado! 💌 Compártelo con tus amigos.'))
+      .catch(()=>alert('Comparte esta página con tus amigos 💌'));
+  } else {
+    alert('Comparte esta página con tus amigos 💌');
+  }
+}
+
+function startGame(m){
+  mode = m;
+  idx = 0; correctThisGame = 0;
+  if(m==='build'){
+    order = shuffle(ITEMS).slice(0,6);
+    show('playbuild');
+    renderBuild();
+  } else if(m==='tf'){
+    order = shuffle(ITEMS);
+    show('playtf');
+    renderTF();
+  } else {
+    // main, quiz: 12 preguntas (todas)
+    order = (m==='quiz') ? shuffle(ITEMS) : ITEMS.slice();
+    show('play');
+    renderQ();
+  }
+}
+
+/* ---------- DETECTIVE (¿bien o mal?) ---------- */
+function renderTF(){
+  const it = order[idx];
+  // Decidimos al azar si mostramos la frase BIEN o con un error
+  const showCorrect = Math.random() < 0.5;
+  tfShownVerb = showCorrect ? it.a : (it.a==='is' ? 'are' : 'is');
+  const verbText = tfShownVerb==='is' ? 'There is' : 'There are';
+  $('tfnum').textContent = `Detective ${idx+1} de ${order.length}`;
+  $('tfemoji').textContent = it.e;
+  $('tfsentence').textContent = `${verbText} ${it.w}.`;
+  $('tffeedback').textContent=''; $('tffeedback').className='feedback';
+  $('tfnext').style.display='none';
+  document.querySelectorAll('#playtf .ans').forEach(b=>{ b.disabled=false; });
+}
+function answerTF(saysGood, btn){
+  const it = order[idx];
+  const reallyGood = (tfShownVerb===it.a);
+  const ok = (saysGood===reallyGood);
+  document.querySelectorAll('#playtf .ans').forEach(b=>b.disabled=true);
+  if(ok){
+    correctThisGame++; totalStars++; save(); updateTopbar(); sndGood();
+    $('tffeedback').className='feedback good';
+    $('tffeedback').textContent = pick(['¡Eres un buen detective! 🕵️','¡Correcto! 🎉','¡Muy bien! 🌟','¡Genial! ✨']);
+    $('tfnext').style.display='none';
+    setTimeout(nextTF, 1200);
+  }else{
+    sndBad();
+    $('tffeedback').className='feedback bad';
+    const right = `There ${it.a} ${it.w}.`;
+    $('tffeedback').textContent = `Casi 😊 Lo correcto es: "${right}"`;
+    $('tfnext').style.display='inline-block';
+    $('tfnext').scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+function nextTF(){
+  idx++;
+  if(idx>=order.length) finishGame();
+  else renderTF();
+}
+
+function renderQ(){
+  const it = order[idx];
+  $('qnum').textContent = `Pregunta ${idx+1} de ${order.length}`;
+  $('emoji').textContent = it.e;
+  if(mode==='quiz'){
+    $('qtext').textContent = `_______ ${it.w}.`;
+    $('qhint').textContent = `Tú puedes 💪`;
+  } else {
+    $('qtext').textContent = `_______ ${it.w}.`;
+    $('qhint').textContent = it.n===1 ? 'Hay UNO 👉' : `Hay ${it.n} (¡muchos!) 👉`;
+  }
+  $('feedback').textContent=''; $('feedback').className='feedback';
+  $('nextbtn').style.display='none';
+  document.querySelectorAll('#play .ans').forEach(b=>{
+    b.disabled=false; b.classList.remove('correct','wrong');
+  });
+}
+
+function answer(choice, btn){
+  const it = order[idx];
+  const ok = choice===it.a;
+  document.querySelectorAll('#play .ans').forEach(b=>b.disabled=true);
+  if(ok){
+    btn.classList.add('correct');
+    correctThisGame++;
+    totalStars++;
+    save(); updateTopbar();
+    sndGood();
+    $('feedback').className='feedback good';
+    $('feedback').textContent = pick(['¡Correcto! 🎉','¡Muy bien! 🌟','¡Excelente! 💖','¡Genial! ✨']);
+    // Avance automático: la niña no tiene que buscar el botón 👇
+    $('nextbtn').style.display='none';
+    setTimeout(nextQ, 1100);
+  }else{
+    btn.classList.add('wrong');
+    // marca la correcta
+    document.querySelectorAll('#play .ans').forEach(b=>{
+      if(b.classList.contains(it.a)) b.classList.add('correct');
+    });
+    sndBad();
+    $('feedback').className='feedback bad';
+    const right = it.a==='is'?'There is':'There are';
+    $('feedback').textContent = `Casi 😊 La respuesta es "${right}"`;
+    // Si se equivoca, mostramos el botón grande y lo llevamos a la vista
+    $('nextbtn').style.display='inline-block';
+    $('nextbtn').scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+function nextQ(){
+  idx++;
+  if(idx>=order.length){ finishGame(); }
+  else renderQ();
+}
+
+/* ---------- BUILD SENTENCE ---------- */
+let target = [], placed = [];
+function renderBuild(){
+  const it = order[idx];
+  $('bqnum').textContent = `Frase ${idx+1} de ${order.length}`;
+  $('bemoji').textContent = it.e;
+  const verb = it.a==='is' ? ['There','is'] : ['There','are'];
+  target = verb.concat(it.w.split(' '));   // ej: There are four books
+  placed = [];
+  $('bfeedback').textContent=''; $('bfeedback').className='feedback';
+  $('bnext').style.display='none';
+  renderSlot();
+  // banco mezclado
+  const bank = $('bank'); bank.innerHTML='';
+  shuffle(target).forEach((w,i)=>{
+    const b=document.createElement('button');
+    b.className='word'; b.textContent=w; b.dataset.w=w; b.dataset.i=i;
+    b.onclick=()=>placeWord(b);
+    bank.appendChild(b);
+  });
+}
+function renderSlot(){
+  $('slot').textContent = placed.length ? placed.join(' ') : '...';
+}
+function placeWord(b){
+  placed.push(b.dataset.w);
+  b.classList.add('used');
+  renderSlot();
+  if(placed.length===target.length) checkBuild();
+}
+function clearSlot(){
+  placed=[]; renderSlot();
+  document.querySelectorAll('#bank .word').forEach(w=>w.classList.remove('used'));
+  $('bfeedback').textContent='';
+}
+function checkBuild(){
+  const ok = placed.join(' ')===target.join(' ');
+  if(ok){
+    correctThisGame++; totalStars++; save(); updateTopbar(); sndGood();
+    $('bfeedback').className='feedback good';
+    $('bfeedback').textContent='¡Perfecto! 🎉 '+target.join(' ');
+    $('bnext').style.display='inline-block';
+    setTimeout(nextBuild, 1300);
+  }else{
+    sndBad();
+    $('bfeedback').className='feedback bad';
+    $('bfeedback').textContent='Mmm, inténtalo otra vez 😊';
+    setTimeout(clearSlot,900);
+  }
+}
+function nextBuild(){
+  idx++;
+  if(idx>=order.length) finishGame();
+  else renderBuild();
+}
+
+/* ---------- FINISH ---------- */
+function finishGame(){
+  done[mode]=true; save(); updateBadges();
+  const totalQ = order.length;
+  const got = correctThisGame;
+  let stars = got===totalQ ? 3 : got>=totalQ*0.6 ? 2 : 1;
+  $('rstars').textContent = '⭐'.repeat(stars)+'☆'.repeat(3-stars);
+  const nm = playerName || 'crack';
+  if(got===totalQ){
+    $('rface').textContent='🏆'; $('rtitle').textContent=`¡PERFECTO, ${nm.toUpperCase()}! 🌈`;
+    sndYay(); confetti(); confetti();
+  }else if(got>=totalQ*0.6){
+    $('rface').textContent='😄'; $('rtitle').textContent=`¡Muy bien, ${nm}!`;
+    sndYay(); confetti();
+  }else{
+    $('rface').textContent='💪'; $('rtitle').textContent=`¡Sigue practicando, ${nm}!`;
+    sndGood();
+  }
+  $('rtext').textContent = `Acertaste ${got} de ${totalQ}.`;
+  show('result');
+}
+function repeatGame(){ startGame(mode); }
+function goMenu(){ updateBadges(); updateTopbar(); show('menu'); }
+
+function resetAll(){
+  if(confirm('¿Borrar todas las estrellas y empezar de nuevo?')){
+    totalStars=0; done={main:false,tf:false,build:false,quiz:false};
+    save(); updateTopbar(); updateBadges();
+  }
+}
+
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* ---------------- BACKGROUND BUBBLES ---------------- */
+(function(){
+  const ems=['✏️','📚','🤖','💡','📏','⏰','🖍️','✂️','💻','🪑','⭐','💖'];
+  const bg=$('bg');
+  for(let i=0;i<14;i++){
+    const s=document.createElement('span');
+    s.textContent=ems[i%ems.length];
+    s.style.left=Math.random()*100+'vw';
+    s.style.animationDuration=(8+Math.random()*10)+'s';
+    s.style.animationDelay=(Math.random()*8)+'s';
+    bg.appendChild(s);
+  }
+})();
+
+/* ---------------- INIT ---------------- */
+load(); updateTopbar(); updateBadges();
+// Enter para confirmar el nombre
+$('nameInput').addEventListener('keydown', e=>{ if(e.key==='Enter') saveName(); });
+// Si ya tenemos nombre guardado, vamos directo al menú; si no, pedimos el nombre
+if(playerName){ applyName(); show('menu'); }
+else { $('hello').textContent='¡Vamos a jugar! 🎮'; setTimeout(()=>$('nameInput').focus(), 400); }
+</script>
+</body>
+</html>
