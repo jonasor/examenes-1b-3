@@ -589,7 +589,7 @@
 <!-- PANTALLA JUEGO -->
 <div id="screen-game">
   <div class="game-header">
-    <button class="btn-back" onclick="goHome()">← Inicio</button>
+    <button class="btn-back" onclick="goHome()">🏠 Menú</button>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
     </div>
@@ -612,7 +612,8 @@
     <div class="result-msg" id="result-msg">¡Lo hiciste increíble!</div>
     <div>
       <button class="btn-play-again" onclick="replayGame()">🔄 Jugar de nuevo</button>
-      <button class="btn-home" onclick="goHome()">🏠 Inicio</button>
+      <button class="btn-home" onclick="goHome()">🏠 Materias</button>
+      <button class="btn-home" onclick="goExamMenu()" style="border-color:var(--purple);color:var(--purple);margin-top:0.3rem">📚 Menú de exámenes</button>
     </div>
   </div>
 </div>
@@ -895,9 +896,8 @@ function renderQuestion() {
       <div style="position:relative">
         <button class="hint-btn" onclick="toggleHint()">💡</button>
         <div class="hint-box" id="hint-box">
-          Paso 1: suma las <strong>unidades</strong> (${a2}+${b2}=${a2+b2}).
-          ${carry ? `Como da ${a2+b2}, escribe <strong>${(a2+b2)%10}</strong> en U y llevas <strong>1</strong> a las decenas.` : ''}
-          Paso 2: suma las <strong>decenas</strong> (${a1}+${b1}${carry?'+1 que llevas':''}).
+          💡 U: ${a2}+${b2}=${a2+b2} → escribe <strong>${(a2+b2)%10 !== (a2+b2) ? (a2+b2)%10+' (llevas 1)' : a2+b2}</strong> en U.<br>
+          💡 D: ${a1}+${b1}${carry ? '+ 1 que llevas' : ''} = <strong>${correctD}</strong>.
         </div>
         <p class="question-text" style="margin-bottom:0.6rem">¿Cuánto es?</p>
 
@@ -951,7 +951,7 @@ function renderQuestion() {
 
         <!-- Instrucción dinámica -->
         <p id="step-label" style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--purple);margin-bottom:0.8rem">
-          ✏️ Escribe primero las <span style="color:#4ECDC4">Unidades</span>
+          ✏️ Escribe el dígito de <span style="color:#4ECDC4">Unidades</span> <span style="font-size:0.8rem;color:#aaa">(un solo número: 0-9)</span>
         </p>
 
         <div class="feedback" id="feedback"></div>
@@ -1008,9 +1008,12 @@ function renderQuestion() {
 // === HELPERS MATH2D ===
 
 function onUInput(el) {
-  // Limitar a 1 dígito (0-9 para la U base; permitir 0-19 momentáneamente si suma >9)
-  const val = el.value.replace(/[^0-9]/g,'');
-  el.value = val.slice(0, 2);
+  // Solo 1 dígito (0-9): la unidad del resultado, nunca el parcial con acarreo
+  let val = el.value.replace(/[^0-9]/g, '');
+  if (val.length > 1) val = val.slice(-1); // quedarse solo con el último dígito tecleado
+  el.value = val;
+  // Si ya tiene 1 dígito, pasar automáticamente a decenas
+  if (val.length === 1) moveToDecenas();
 }
 
 function handleU(e) {
@@ -1109,16 +1112,16 @@ function checkAnswer2d() {
   answered = true;
 
   const answer = q.answer;
-  const correctU = answer % 10;
-  // decenas: puede ser 1 o 2 dígitos (ej. 81 → D=8, o 100+ → D=10+)
-  const correctD = Math.floor(answer / 10);
+  const correctU = answer % 10;           // dígito de unidades (0-9)
+  const correctD = Math.floor(answer / 10); // decenas completas del resultado
 
-  const userAnswer = valD * 10 + valU;
-  const isCorrect = userAnswer === answer;
+  const uOk = valU === correctU;
+  const dOk = valD === correctD;
+  const isCorrect = uOk && dOk;
 
-  // Colorear inputs
-  if (valU === correctU) inpU.classList.add('correct'); else inpU.classList.add('wrong');
-  if (valD === correctD) inpD.classList.add('correct'); else inpD.classList.add('wrong');
+  // Colorear inputs individualmente
+  if (uOk) inpU.classList.add('correct'); else inpU.classList.add('wrong');
+  if (dOk) inpD.classList.add('correct'); else inpD.classList.add('wrong');
 
   if (isCorrect) {
     score++;
@@ -1127,8 +1130,12 @@ function checkAnswer2d() {
     fb.textContent = getRandom(['🎉 ¡Muy bien!','⭐ ¡Correcto!','🌟 ¡Excelente!','🎀 ¡Genial!','✨ ¡Súper!']);
     spawnConfetti(5);
   } else {
+    const errMsg = !uOk && !dOk
+      ? `😅 Era D=${correctD}, U=${correctU}. ¡La próxima!`
+      : !uOk ? `😅 Las unidades eran ${correctU}. ¡Casi!`
+             : `😅 Las decenas eran ${correctD}. ¡Casi!`;
     fb.className = 'feedback wrong';
-    fb.textContent = `😅 Era ${answer} (D=${correctD}, U=${correctU}). ¡La próxima!`;
+    fb.textContent = errMsg;
   }
 
   document.getElementById('current-score').textContent = score;
@@ -1262,6 +1269,12 @@ function spawnConfetti(count) {
 }
 
 function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function goExamMenu() {
+  // Si estamos en GitHub Pages dentro de examenes-1b-3, subir un nivel
+  const base = window.location.pathname.replace(/\/matematicas.*/, '');
+  window.location.href = base + '/index.html';
+}
 </script>
 </body>
 </html>
